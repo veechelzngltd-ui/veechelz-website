@@ -1,126 +1,362 @@
 'use client'
 
 import { useState } from 'react'
-import Header from '@/components/Header'
-import Hero from '@/components/Hero'
-import Showroom from '@/components/Showroom'
-import PartsStore from '@/components/PartsStore'
-import Footer from '@/components/Footer'
-import ConsultationModal from '@/components/ConsultationModal'
-import QuoteDrawer from '@/components/QuoteDrawer'
+import Link from 'next/link'
+import { Zap, Link2, Frame, Volume2, MessageCircle } from 'lucide-react'
+import { FinishSwatchRow, SlatPreview, timberFinishes } from '@/components/FinishSwatches'
 
-interface QuickFormValues {
+type CategoryId = 'motors' | 'chains' | 'brackets' | 'acoustic'
+type FilterId = 'all' | CategoryId
+
+interface Part {
+  id: string
   name: string
-  email: string
-  phone: string
-  notes: string
+  sku: string
+  category: CategoryId
+  spec: string
+  /** Naira price string, or null to show "Inquire B2B Stock" */
+  price: string | null
+  /** Optional selectable finishes (sampled from the real stock swatch card), e.g. timber slats */
+  finishes?: boolean
 }
 
-export default function HomePage() {
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedCategoryNotes, setSelectedCategoryNotes] = useState('')
-  const [prefill, setPrefill] = useState<QuickFormValues | undefined>(undefined)
+const WHATSAPP_NUMBER = '2349111117575'
 
-  const openConsultation = () => setModalOpen(true)
+function whatsappLink(name: string, sku: string, finishName?: string): string {
+  const message = finishName
+    ? `Hello Veechelz, I want to order ${name} (${sku}) in ${finishName} finish`
+    : `Hello Veechelz, I want to order ${name} (${sku})`
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
+}
 
-  const openConsultationWithValues = (values: QuickFormValues) => {
-    setPrefill(values)
-    setModalOpen(true)
-  }
+const categoryMeta: Record<CategoryId, { label: string; icon: typeof Zap }> = {
+  motors: { label: 'Motors & Smart Automation', icon: Zap },
+  chains: { label: 'Control Mechanisms & Chains', icon: Link2 },
+  brackets: { label: 'Brackets & Extrusions', icon: Frame },
+  acoustic: { label: 'Acoustic & Slat Accessories', icon: Volume2 },
+}
 
-  const handleExploreCollection = (categoryName: string, finish?: string) => {
-    setSelectedCategoryNotes(
-      finish ? `Interested in: ${categoryName} — Colour: ${finish}` : `Interested in: ${categoryName}`
-    )
-    setModalOpen(true)
-  }
+const filters: { id: FilterId; label: string }[] = [
+  { id: 'all', label: 'All Parts' },
+  { id: 'motors', label: 'Motors & Remotes' },
+  { id: 'brackets', label: 'Brackets & Rails' },
+  { id: 'chains', label: 'Chains & Clutches' },
+  { id: 'acoustic', label: 'Acoustic Hardware' },
+]
+
+const parts: Part[] = [
+  // Motors & Smart Automation
+  {
+    id: 'mot-25rf',
+    name: '25mm RF Tubular Motor',
+    sku: 'VCH-MOT-25RF',
+    category: 'motors',
+    spec: 'Torque: 1.1Nm | 38mm Tube Compatible',
+    price: '₦68,500',
+  },
+  {
+    id: 'bridge-wz01',
+    name: 'WiFi/Zigbee Smart Bridge',
+    sku: 'VCH-BRG-WZ01',
+    category: 'motors',
+    spec: 'WiFi 2.4GHz + Zigbee 3.0 | Tuya Smart App',
+    price: '₦34,000',
+  },
+  {
+    id: 'rem-15ch',
+    name: 'Multi-Channel Remote (15-Channel)',
+    sku: 'VCH-REM-15CH',
+    category: 'motors',
+    spec: 'Range: 30m Open Air | RF 433MHz',
+    price: '₦18,500',
+  },
+  {
+    id: 'sol-5v2w',
+    name: 'Solar Charging Panel',
+    sku: 'VCH-SOL-5V2W',
+    category: 'motors',
+    spec: 'Output: 5V / 2W | USB-C Connector',
+    price: null,
+  },
+  // Control Mechanisms & Chains
+  {
+    id: 'clt-38hd',
+    name: 'Heavy-Duty Geared Clutch 38mm',
+    sku: 'VCH-CLT-38HD',
+    category: 'chains',
+    spec: 'Load Rating: 12kg | 1:4 Gear Ratio',
+    price: '₦9,200',
+  },
+  {
+    id: 'chn-ss45',
+    name: 'Stainless Steel Ball Chain',
+    sku: 'VCH-CHN-SS45',
+    category: 'chains',
+    spec: '4.5mm Beads | Sold Per Metre',
+    price: '₦1,150 / m',
+  },
+  {
+    id: 'spr-crd32',
+    name: 'Cordless Spring Roller Mechanism',
+    sku: 'VCH-SPR-CRD32',
+    category: 'chains',
+    spec: '32mm Tube | Up to 1.6m Drop',
+    price: '₦11,800',
+  },
+  {
+    id: 'clt-adpt',
+    name: 'Universal Clutch Adaptor Set',
+    sku: 'VCH-CLT-ADPT',
+    category: 'chains',
+    spec: 'Fits 32/38/45mm Tubes',
+    price: null,
+  },
+  // Brackets & Extrusions
+  {
+    id: 'brk-dn02',
+    name: 'Dual Day/Night Brackets',
+    sku: 'VCH-BRK-DN02',
+    category: 'brackets',
+    spec: 'Steel | Set of 2 | Powder-Coated',
+    price: '₦6,400',
+  },
+  {
+    id: 'clp-cfm10',
+    name: 'Ceiling Flush Mount Clips',
+    sku: 'VCH-CLP-CFM10',
+    category: 'brackets',
+    spec: 'Aluminum | Pack of 10',
+    price: '₦4,750',
+  },
+  {
+    id: 'ext-cst3m',
+    name: 'Aluminum Cassette Profiles',
+    sku: 'VCH-EXT-CST3M',
+    category: 'brackets',
+    spec: '3m Length | Anodized Finish',
+    price: null,
+  },
+  {
+    id: 'rail-wt25',
+    name: 'Weighted Bottom Rails',
+    sku: 'VCH-RAIL-WT25',
+    category: 'brackets',
+    spec: '25mm Insert | Per Linear Metre',
+    price: '₦2,300 / m',
+  },
+  // Acoustic & Slat Accessories
+  {
+    id: 'acs-zclp',
+    name: 'Acoustic Panel Mounting Z-Clips',
+    sku: 'VCH-ACS-ZCLP',
+    category: 'acoustic',
+    spec: 'Steel | Pack of 20',
+    price: '₦5,600',
+  },
+  {
+    id: 'slt-tbr50',
+    name: '50mm Venetian Timber Slats',
+    sku: 'VCH-SLT-TBR50',
+    category: 'acoustic',
+    spec: 'Basswood | Per Linear Metre',
+    price: '₦3,900 / m',
+    finishes: true,
+  },
+  {
+    id: 'kit-gwr',
+    name: 'Guide Wire Retention Kits',
+    sku: 'VCH-KIT-GWR',
+    category: 'acoustic',
+    spec: '2mm Stainless Wire | Complete Kit',
+    price: '₦7,250',
+  },
+]
+
+function PartCard({ part }: { part: Part }) {
+  const Icon = categoryMeta[part.category].icon
+  const [selectedFinish, setSelectedFinish] = useState(timberFinishes[0].name)
+  const activeFinish = timberFinishes.find((f) => f.name === selectedFinish) ?? timberFinishes[0]
+  // Drop a photo at public/images/parts/<part.id>.jpg and it appears here automatically.
+  // No file yet -> the icon below stays as the placeholder.
+  const photoSrc = `/images/parts/${part.id}.jpg`
+  const chainFallback = part.category === 'chains' ? '/images/roller-chain-mechanism.jpg' : null
 
   return (
-    <div className="min-h-screen bg-stone-50">
-      <Header onBookConsultation={openConsultation} />
-      <main className="pt-0">
-        <section id="about">
-          <Hero onBookConsultation={openConsultation} />
-        </section>
-        <section id="solutions" className="scroll-mt-24">
-          <Showroom onExploreCollection={handleExploreCollection} />
-        </section>
-        <section id="projects">
-          <PartsStore />
-        </section>
-        <ContactSection onOpenModal={openConsultationWithValues} />
-      </main>
-      <Footer onOpenConsultation={openConsultation} />
-      <ConsultationModal
-        isOpen={modalOpen}
-        onClose={() => {
-          setModalOpen(false)
-          setSelectedCategoryNotes('')
-          setPrefill(undefined)
-        }}
-        initialNotes={selectedCategoryNotes}
-        initialValues={prefill}
-      />
-      <QuoteDrawer />
-    </div>
+    <article className="group bg-white rounded-xl overflow-hidden border border-[#E7E3DA] transition-[transform,box-shadow,border-color] duration-300 ease-out hover:shadow-lg hover:border-[#B38F5B]/50">
+      {/* Schematic Icon */}
+      <div className="relative aspect-[4/3] flex items-center justify-center bg-[#F7F5F0]">
+        {part.finishes ? (
+          <SlatPreview finish={activeFinish} className="absolute inset-0 h-full w-full" />
+        ) : (
+          <>
+            <Icon
+              className="h-14 w-14 text-[#B38F5B] stroke-[1.25] transition-transform duration-300 ease-out group-hover:scale-110"
+              aria-hidden="true"
+            />
+            <img
+              src={photoSrc}
+              alt={part.name}
+              className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105"
+              loading="lazy"
+              onError={(e) => {
+                const img = e.currentTarget
+                if (chainFallback && !img.dataset.fallback) {
+                  img.dataset.fallback = '1'
+                  img.style.objectPosition = 'left top'
+                  img.src = chainFallback
+                } else {
+                  img.style.display = 'none'
+                }
+              }}
+            />
+          </>
+        )}
+        <span className="absolute top-3 left-3 px-2 py-0.5 bg-[#18181B] text-[#F7F5F0] text-[10px] font-mono tracking-wider rounded-none">
+          {part.sku}
+        </span>
+      </div>
+
+      {/* Content */}
+      <div className="p-5">
+        <h3 className="font-serif text-base font-medium text-[#18181B] mb-1.5 line-clamp-1">
+          {part.name}
+        </h3>
+        <p className="text-xs text-stone-500 font-mono mb-4 leading-relaxed">
+          SKU: {part.sku} | {part.spec}
+        </p>
+
+        {part.finishes && (
+          <FinishSwatchRow
+            size={30}
+            label={`Finish: ${selectedFinish}`}
+            selected={selectedFinish}
+            onSelect={(f) => setSelectedFinish(f.name)}
+          />
+        )}
+
+        <div className="mb-4">
+          {part.price ? (
+            <span className="text-lg font-semibold text-[#18181B]">{part.price}</span>
+          ) : (
+            <span className="inline-block px-2.5 py-1 text-xs font-medium tracking-wide uppercase text-[#B38F5B] bg-[#18181B]/5 border border-[#B38F5B]/30 rounded-none">
+              Inquire B2B Stock
+            </span>
+          )}
+        </div>
+
+        <a
+          href={whatsappLink(part.name, part.sku, part.finishes ? selectedFinish : undefined)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#18181B] text-white text-sm font-medium rounded-none hover:bg-[#B38F5B] transition-colors duration-200 ease-out active:scale-95"
+        >
+          <MessageCircle className="h-4 w-4" aria-hidden="true" />
+          Order Part via WhatsApp
+        </a>
+      </div>
+    </article>
   )
 }
 
-function ContactSection({ onOpenModal }: { onOpenModal: (values: QuickFormValues) => void }) {
+export default function PartsPage() {
+  const [activeFilter, setActiveFilter] = useState<FilterId>('all')
+
+  const filteredParts =
+    activeFilter === 'all' ? parts : parts.filter((p) => p.category === activeFilter)
+
+  const groupedByCategory = (Object.keys(categoryMeta) as CategoryId[])
+    .map((catId) => ({
+      id: catId,
+      label: categoryMeta[catId].label,
+      icon: categoryMeta[catId].icon,
+      items: filteredParts.filter((p) => p.category === catId),
+    }))
+    .filter((group) => group.items.length > 0)
+
   return (
-    <section id="contact" className="py-16 md:py-24 px-6 md:px-16 bg-stone-100">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-          <div>
-            <span className="inline-block px-4 py-1.5 rounded-full bg-stone-200 text-stone-700 text-sm font-medium tracking-wide mb-6">Project Enquiries</span>
-            <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl font-medium text-stone-900 leading-tight tracking-tight mb-6">Start Your Project with Veechelz</h2>
-            <p className="text-lg text-stone-600 leading-relaxed mb-10 max-w-xl">From residential window treatments to corporate office fit-outs and B2B contract supply — our technical team delivers specification, fabrication, and installation across Nigeria.</p>
-            <div className="space-y-4">{[
-              { icon: 'Calendar', label: 'Site Survey & Specification', desc: 'On-site measurement and technical consultation' },
-              { icon: 'MapPin', label: 'Nationwide Installation', desc: 'Certified teams in Lagos, Abuja, Port Harcourt & beyond' },
-              { icon: 'Phone', label: 'B2B Contract Supply', desc: 'General contracting and bulk supply for developers' },
-            ].map((item) => (
-              <div key={item.label} className="flex items-start gap-4 p-4 bg-white rounded-lg border border-stone-200">
-                <div className="flex-shrink-0 p-3 bg-stone-100 rounded-lg">
-                  <svg className="h-6 w-6 text-stone-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    {item.icon === 'Calendar' && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 002 2v12a2 2 0 002 2z" />}
-                    {item.icon === 'MapPin' && (
-                      <>
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </>
-                    )}
-                    {item.icon === 'Phone' && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />}
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium text-stone-900">{item.label}</p>
-                  <p className="text-sm text-stone-600">{item.desc}</p>
-                </div>
-              </div>
-            ))}</div>
-          </div>
-          <div className="bg-white rounded-xl border border-stone-200 p-8 md:p-10">
-            <h3 className="font-serif text-xl font-medium text-stone-900 mb-6">Request a Site Survey</h3>
-            <form className="space-y-5" onSubmit={(e) => {
-              e.preventDefault()
-              const data = new FormData(e.currentTarget)
-              onOpenModal({
-                name: String(data.get('name') || ''),
-                email: String(data.get('email') || ''),
-                phone: String(data.get('phone') || ''),
-                notes: String(data.get('message') || ''),
-              })
-            }}>
-              <div><label htmlFor="quick-name" className="block text-sm font-medium text-stone-700 mb-1.5">Full Name</label><input type="text" id="quick-name" name="name" className="w-full px-4 py-3 border border-stone-300 rounded-none text-sm focus:border-stone-900 transition-colors" placeholder="Your name" required /></div>
-              <div><label htmlFor="quick-email" className="block text-sm font-medium text-stone-700 mb-1.5">Email Address</label><input type="email" id="quick-email" name="email" className="w-full px-4 py-3 border border-stone-300 rounded-none text-sm focus:border-stone-900 transition-colors" placeholder="your@email.com" required /></div>
-              <div><label htmlFor="quick-phone" className="block text-sm font-medium text-stone-700 mb-1.5">Phone Number</label><input type="tel" id="quick-phone" name="phone" className="w-full px-4 py-3 border border-stone-300 rounded-none text-sm focus:border-stone-900 transition-colors" placeholder="0911 111 7575" required /></div>
-              <div><label htmlFor="quick-message" className="block text-sm font-medium text-stone-700 mb-1.5">Project Details</label><textarea id="quick-message" name="message" rows={3} className="w-full px-4 py-3 border border-stone-300 rounded-none text-sm focus:border-stone-900 transition-colors resize-none" placeholder="Project type, location, timeline, and any specifications..." required /></div>
-              <button type="submit" className="w-full py-3.5 bg-stone-900 text-white font-medium text-sm rounded-none hover:bg-stone-700 transition-colors">Schedule Site Survey</button>
-            </form>
-          </div>
+    <div className="min-h-screen bg-[#F7F5F0] py-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {/* Breadcrumb/Back Link */}
+        <div className="mb-8">
+          <Link
+            href="/"
+            className="inline-flex items-center text-sm font-medium text-stone-600 hover:text-[#18181B] transition-colors"
+          >
+            <span className="mr-2">←</span> Back to Home
+          </Link>
         </div>
+
+        {/* Trade Banner */}
+        <div className="mb-10 p-5 md:p-6 bg-[#18181B] text-[#F7F5F0] rounded-xl flex flex-col sm:flex-row sm:items-center gap-3">
+          <span className="inline-block flex-shrink-0 w-fit px-2.5 py-1 text-[10px] font-semibold uppercase tracking-widest text-[#18181B] bg-[#B38F5B] rounded-none">
+            Trade &amp; B2B
+          </span>
+          <p className="text-sm md:text-base text-stone-200 leading-relaxed">
+            Commercial &amp; Trade Spare Parts — Genuine factory components for installers,
+            facility managers, and bespoke retrofits.
+          </p>
+        </div>
+
+        <div className="max-w-2xl mb-10">
+          <h1 className="font-serif text-3xl md:text-4xl font-medium text-[#18181B] mb-4">
+            Parts &amp; Hardware Store
+          </h1>
+          <p className="text-stone-600 leading-relaxed">
+            Genuine motors, control mechanisms, brackets, and acoustic hardware for repair,
+            replacement, and bespoke fabrication. Message our team directly on WhatsApp for
+            instant ordering and dispatch.
+          </p>
+        </div>
+
+        {/* Category Filter Bar */}
+        <div className="flex flex-wrap gap-2 mb-10" role="tablist" aria-label="Part categories">
+          {filters.map((filter) => (
+            <button
+              key={filter.id}
+              role="tab"
+              aria-selected={activeFilter === filter.id}
+              onClick={() => setActiveFilter(filter.id)}
+              className={`px-4 py-2 text-sm font-medium rounded-none transition-all duration-200 ${
+                activeFilter === filter.id
+                  ? 'bg-[#18181B] text-white'
+                  : 'bg-white text-stone-700 border border-[#E7E3DA] hover:border-[#B38F5B] hover:text-[#18181B]'
+              }`}
+            >
+              {filter.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Catalog, grouped by category */}
+        <div className="space-y-14">
+          {groupedByCategory.map((group) => (
+            <section key={group.id} aria-labelledby={`cat-${group.id}`}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-2 bg-[#18181B] rounded-lg">
+                  <group.icon className="h-5 w-5 text-[#B38F5B]" aria-hidden="true" />
+                </div>
+                <h2
+                  id={`cat-${group.id}`}
+                  className="font-serif text-xl md:text-2xl font-medium text-[#18181B]"
+                >
+                  {group.label}
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {group.items.map((part) => (
+                  <PartCard key={part.id} part={part} />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+
+        {filteredParts.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-stone-600">No parts found in this category.</p>
+          </div>
+        )}
       </div>
-    </section>
+    </div>
   )
 }
