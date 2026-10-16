@@ -1,6 +1,7 @@
 'use client'
 
 import { ArrowRight, Calendar, MapPin, Phone } from 'lucide-react'
+import Image from 'next/image'
 
 interface HeroProps {
   onBookConsultation: () => void
@@ -74,11 +75,7 @@ export default function Hero({ onBookConsultation }: HeroProps) {
           {/* Visual Showcase */}
           <div className="relative animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <div className="relative aspect-[4/5] lg:aspect-[3/4] rounded-xl overflow-hidden shadow-2xl">
-              <img
-                src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80"
-                alt="Elegant living room with custom roller blinds filtering natural light"
-                className="w-full h-full object-cover transition-opacity duration-300 ease-out"
-              />
+              <Image src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&q=80" alt="Elegant living room with custom roller blinds filtering natural light" fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="w-full h-full object-cover transition-opacity duration-300 ease-out" />
             </div>
             {/* Floating Card */}
             <div className="absolute -bottom-6 -left-6 md:-bottom-8 md:-left-8 p-6 bg-white rounded-lg shadow-xl max-w-xs transition-[transform,opacity] duration-300 ease-out pointer-events-none">
