@@ -17,9 +17,20 @@ const playfair = Playfair_Display({
   weight: ['400', '500', '600', '700'],
 })
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://veechelz-website.vercel.app'
+
 export const metadata: Metadata = {
-  title: 'Veechelz Nigeria | Custom Window Blinds & Premium Parts',
-  description: 'Handcrafted custom window blinds and premium blind parts. Roller, Venetian, Motorized blinds plus bottom plates, bead chains, and blind materials.',
+  metadataBase: new URL(siteUrl),
+  openGraph: {
+    type: 'website',
+    siteName: 'Veechelz Nigeria Limited',
+    locale: 'en_NG',
+    title: 'Veechelz Nigeria | Custom Window Blinds in Abuja',
+    description: 'Made-to-measure window blinds, motorized systems and professional installation in Abuja, Lagos and Port Harcourt, plus trade parts and hardware.',
+  },
+  twitter: { card: 'summary_large_image' },
+  title: 'Veechelz Nigeria | Custom Window Blinds in Abuja',
+  description: 'Made-to-measure window blinds, motorized systems and professional installation in Abuja, Lagos and Port Harcourt, plus trade parts and hardware.',
   icons: {
     icon: [
       { url: '/veechelz-icon-v2.svg', type: 'image/svg+xml' },
@@ -31,6 +42,24 @@ export const metadata: Metadata = {
   keywords: ['custom blinds', 'window blinds', 'roller blinds', 'venetian blinds', 'motorized blinds', 'blind parts', 'bottom plates', 'bead chains'],
 }
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'Veechelz Nigeria Limited',
+  url: siteUrl,
+  telephone: '+2349111117575',
+  email: 'veechelzngltd@gmail.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Suite B5, Begger Paint Plaza, Alexandria Crescent, Wuse 2',
+    addressLocality: 'Abuja',
+    addressRegion: 'FCT',
+    addressCountry: 'NG',
+  },
+  areaServed: ['Abuja', 'Lagos', 'Port Harcourt'],
+  sameAs: ['https://www.instagram.com/veechelz_ng'],
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -39,6 +68,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
       <body className="bg-stone-50 antialiased">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <CartProvider>{children}</CartProvider>
         <HomeScrollReset />
         <Analytics />
