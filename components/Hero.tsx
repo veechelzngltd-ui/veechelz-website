@@ -87,7 +87,7 @@ export default function Hero({ onBookConsultation }: HeroProps) {
               <p className="text-[11px] text-stone-500 leading-snug mt-0.5">
                 in central Abuja (Wuse 2, Maitama, Garki, Jabi, Guzape)
               </p>
-              <p className="text-sm text-stone-500 mt-2">Outside Abuja: small travel fee, 100% refunded when you order</p>
+              <p className="text-sm text-stone-500 mt-2">Outside Abuja: fees applies</p>
             </div>
           </div>
         </div>

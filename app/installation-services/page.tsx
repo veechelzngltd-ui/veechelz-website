@@ -74,8 +74,7 @@ export default function InstallationServices() {
                     </h4>
                     <p className="text-sm text-stone-600 leading-relaxed">
                       For locations outside central Abuja or interstate fit-outs (Lagos, Port Harcourt,
-                      nationwide), a nominal travel commitment fee applies. 100% of this fee is credited
-                      directly toward your final invoice once fabrication is approved.
+                      nationwide), a nominal travel commitment fee applies.
                     </p>
                   </div>
                 </div>

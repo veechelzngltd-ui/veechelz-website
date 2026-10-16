@@ -27,7 +27,7 @@ const sections: FaqSection[] = [
       },
       {
         q: 'Is the on-site survey free?',
-        a: 'Within central Abuja municipal zones (Wuse 2, Maitama, Garki, Jabi, Guzape, etc.), on-site surveys are complimentary for qualifying multi-window projects following an initial estimate. For projects outside Abuja or interstate, a modest travel fee applies—which is 100% credited back to your final invoice when your order proceeds to production.',
+        a: 'Within central Abuja municipal zones (Wuse 2, Maitama, Garki, Jabi, Guzape, etc.), on-site surveys are complimentary for qualifying multi-window projects following an initial estimate. For projects outside Abuja or interstate, a modest travel fee applies.',
       },
       {
         q: 'How long does fabrication and installation take?',
