@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/components/CartContext'
 import { Analytics } from '@vercel/analytics/next'
+import HomeScrollReset from '@/components/HomeScrollReset'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,6 +40,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${playfair.variable} scroll-smooth`}>
       <body className="bg-stone-50 antialiased">
         <CartProvider>{children}</CartProvider>
+        <HomeScrollReset />
         <Analytics />
       </body>
     </html>

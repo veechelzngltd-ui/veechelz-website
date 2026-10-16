@@ -14,8 +14,6 @@ interface Part {
   sku: string
   category: CategoryId
   spec: string
-  /** Naira price string, or null to show "Inquire B2B Stock" */
-  price: string | null
   /** Optional selectable finishes (sampled from the real stock swatch card), e.g. timber slats */
   finishes?: boolean
 }
@@ -24,8 +22,8 @@ const WHATSAPP_NUMBER = '2349111117575'
 
 function whatsappLink(name: string, sku: string, finishName?: string): string {
   const message = finishName
-    ? `Hello Veechelz, I want to order ${name} (${sku}) in ${finishName} finish`
-    : `Hello Veechelz, I want to order ${name} (${sku})`
+    ? `Hello Veechelz, I would like a quote for ${name} (${sku}) in ${finishName} finish`
+    : `Hello Veechelz, I would like a quote for ${name} (${sku})`
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`
 }
 
@@ -52,7 +50,6 @@ const parts: Part[] = [
     sku: 'VCH-MOT-25RF',
     category: 'motors',
     spec: 'Torque: 1.1Nm | 38mm Tube Compatible',
-    price: '₦68,500',
   },
   {
     id: 'bridge-wz01',
@@ -60,7 +57,6 @@ const parts: Part[] = [
     sku: 'VCH-BRG-WZ01',
     category: 'motors',
     spec: 'WiFi 2.4GHz + Zigbee 3.0 | Tuya Smart App',
-    price: '₦34,000',
   },
   {
     id: 'rem-15ch',
@@ -68,7 +64,6 @@ const parts: Part[] = [
     sku: 'VCH-REM-15CH',
     category: 'motors',
     spec: 'Range: 30m Open Air | RF 433MHz',
-    price: '₦18,500',
   },
   {
     id: 'sol-5v2w',
@@ -76,7 +71,6 @@ const parts: Part[] = [
     sku: 'VCH-SOL-5V2W',
     category: 'motors',
     spec: 'Output: 5V / 2W | USB-C Connector',
-    price: null,
   },
   // Control Mechanisms & Chains
   {
@@ -85,7 +79,6 @@ const parts: Part[] = [
     sku: 'VCH-CLT-38HD',
     category: 'chains',
     spec: 'Load Rating: 12kg | 1:4 Gear Ratio',
-    price: '₦9,200',
   },
   {
     id: 'chn-ss45',
@@ -93,7 +86,6 @@ const parts: Part[] = [
     sku: 'VCH-CHN-SS45',
     category: 'chains',
     spec: '4.5mm Beads | Sold Per Metre',
-    price: '₦1,150 / m',
   },
   {
     id: 'spr-crd32',
@@ -101,7 +93,6 @@ const parts: Part[] = [
     sku: 'VCH-SPR-CRD32',
     category: 'chains',
     spec: '32mm Tube | Up to 1.6m Drop',
-    price: '₦11,800',
   },
   {
     id: 'clt-adpt',
@@ -109,7 +100,6 @@ const parts: Part[] = [
     sku: 'VCH-CLT-ADPT',
     category: 'chains',
     spec: 'Fits 32/38/45mm Tubes',
-    price: null,
   },
   // Brackets & Extrusions
   {
@@ -118,7 +108,6 @@ const parts: Part[] = [
     sku: 'VCH-BRK-DN02',
     category: 'brackets',
     spec: 'Steel | Set of 2 | Powder-Coated',
-    price: '₦6,400',
   },
   {
     id: 'clp-cfm10',
@@ -126,7 +115,6 @@ const parts: Part[] = [
     sku: 'VCH-CLP-CFM10',
     category: 'brackets',
     spec: 'Aluminum | Pack of 10',
-    price: '₦4,750',
   },
   {
     id: 'ext-cst3m',
@@ -134,7 +122,6 @@ const parts: Part[] = [
     sku: 'VCH-EXT-CST3M',
     category: 'brackets',
     spec: '3m Length | Anodized Finish',
-    price: null,
   },
   {
     id: 'rail-wt25',
@@ -142,7 +129,6 @@ const parts: Part[] = [
     sku: 'VCH-RAIL-WT25',
     category: 'brackets',
     spec: '25mm Insert | Per Linear Metre',
-    price: '₦2,300 / m',
   },
   // Acoustic & Slat Accessories
   {
@@ -151,7 +137,6 @@ const parts: Part[] = [
     sku: 'VCH-ACS-ZCLP',
     category: 'acoustic',
     spec: 'Steel | Pack of 20',
-    price: '₦5,600',
   },
   {
     id: 'slt-tbr50',
@@ -159,7 +144,6 @@ const parts: Part[] = [
     sku: 'VCH-SLT-TBR50',
     category: 'acoustic',
     spec: 'Basswood | Per Linear Metre',
-    price: '₦3,900 / m',
     finishes: true,
   },
   {
@@ -168,7 +152,6 @@ const parts: Part[] = [
     sku: 'VCH-KIT-GWR',
     category: 'acoustic',
     spec: '2mm Stainless Wire | Complete Kit',
-    price: '₦7,250',
   },
 ]
 
@@ -235,13 +218,9 @@ function PartCard({ part }: { part: Part }) {
         )}
 
         <div className="mb-4">
-          {part.price ? (
-            <span className="text-lg font-semibold text-[#18181B]">{part.price}</span>
-          ) : (
-            <span className="inline-block px-2.5 py-1 text-xs font-medium tracking-wide uppercase text-[#B38F5B] bg-[#18181B]/5 border border-[#B38F5B]/30 rounded-none">
-              Inquire B2B Stock
-            </span>
-          )}
+          <span className="inline-block px-2.5 py-1 text-xs font-medium tracking-wide uppercase text-[#B38F5B] bg-[#18181B]/5 border border-[#B38F5B]/30 rounded-none">
+            Price on Quote
+          </span>
         </div>
 
         <a
@@ -251,7 +230,7 @@ function PartCard({ part }: { part: Part }) {
           className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#18181B] text-white text-sm font-medium rounded-none hover:bg-[#B38F5B] transition-colors duration-200 ease-out active:scale-95"
         >
           <MessageCircle className="h-4 w-4" aria-hidden="true" />
-          Order Part via WhatsApp
+          Request a Quote via WhatsApp
         </a>
       </div>
     </article>

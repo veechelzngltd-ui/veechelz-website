@@ -189,10 +189,10 @@ function PartCard({ part, index }: PartCardProps) {
           ))}
         </div>
 
-        {/* Price on Request Badge */}
+        {/* Price on Quote Badge */}
         <div className="mb-4">
           <span className="inline-block px-2.5 py-1 text-xs font-medium tracking-wide uppercase text-stone-700 bg-stone-100 border border-stone-200 rounded-none">
-            Price on Request
+            Price on Quote
           </span>
         </div>
 
