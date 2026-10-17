@@ -19,7 +19,7 @@ export const INSTAGRAM_HANDLE = '@veechelz_ng'
 // Content
 export const HEADLINE = 'Measured to the millimetre.'
 export const SUB_HEADLINE = 'Blinds made to fit your window exactly.'
-export const SERVICES_LINE = 'Custom motorised & manual blinds — blackout, day & night, wooden venetian. Spare parts & accessories delivered nationwide.'
+export const SERVICES_LINE = 'Custom motorised & manual blinds — blackout, day & night, wooden venetian. Installation nationwide.'
 export const OFFER_LINE = 'Free on-site survey with laser measurement & sample viewing in central Abuja municipal zones. Outside these zones: nominal travel fee, 100% refunded on order.'
 export const TRUST_LINE = '5-year performance guarantee.'
 export const CTA_TEXT = 'Book your free survey'

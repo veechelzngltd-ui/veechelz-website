@@ -229,7 +229,7 @@ export default function ConsultationModal({ isOpen, onClose, onSubmit, initialNo
                   <option value="replacement">Replacement Only</option>
                   <option value="commercial">Commercial Project</option>
                   <option value="motorization">Motorization Upgrade</option>
-                  <option value="repair">Repair/Parts</option>
+                  <option value="repair">Repair</option>
                 </select>
                 {errors.projectType && <p id="projectType-error" className="mt-1 text-sm text-red-500" role="alert">{errors.projectType}</p>}
               </div>

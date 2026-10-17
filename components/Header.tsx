@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ShoppingCart, Menu, X, Mail } from 'lucide-react'
-import { useCart } from './CartContext'
+import { Menu, X, Mail } from 'lucide-react'
 
 export default function Header({ onBookConsultation }: { onBookConsultation?: () => void }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { itemCount, openDrawer } = useCart()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +19,6 @@ export default function Header({ onBookConsultation }: { onBookConsultation?: ()
   const navigation = [
     { name: 'Home', href: '#home' },
     { name: 'Our Solutions', href: '#solutions' },
-    { name: 'Parts Store', href: '/parts' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '#contact' },
   ]
@@ -85,22 +82,6 @@ export default function Header({ onBookConsultation }: { onBookConsultation?: ()
               aria-label="Contact"
             >
               <Mail className="h-5 w-5 stroke-[1.5]" aria-hidden="true" />
-            </button>
-
-            {/* Cart icon opens the quote request drawer */}
-            <button
-              onClick={openDrawer}
-              className={`relative p-2 transition-colors duration-200 ease-out hover:text-[#B38F5B] ${
-                isScrolled ? 'text-stone-700' : 'text-stone-100'
-              }`}
-              aria-label="Your Quote Request"
-            >
-              <ShoppingCart className="h-5 w-5 stroke-[1.5]" aria-hidden="true" />
-              {itemCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center h-4 w-4 bg-[#B38F5B] text-white text-[10px] font-medium rounded-full">
-                  {itemCount > 9 ? '9+' : itemCount}
-                </span>
-              )}
             </button>
 
             <button
