@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import './globals.css'
-import { CartProvider } from '@/components/CartContext'
 import { Analytics } from '@vercel/analytics/next'
 import HomeScrollReset from '@/components/HomeScrollReset'
 
@@ -26,11 +25,11 @@ export const metadata: Metadata = {
     siteName: 'Veechelz Nigeria Limited',
     locale: 'en_NG',
     title: 'Veechelz Nigeria | Custom Window Blinds in Abuja',
-    description: 'Made-to-measure window blinds, motorized systems and professional installation in Abuja, Lagos and Port Harcourt, plus trade parts and hardware.',
+    description: 'Made-to-measure window blinds, motorized systems and professional installation in Abuja, Lagos and Port Harcourt.',
   },
   twitter: { card: 'summary_large_image' },
   title: 'Veechelz Nigeria | Custom Window Blinds in Abuja',
-  description: 'Made-to-measure window blinds, motorized systems and professional installation in Abuja, Lagos and Port Harcourt, plus trade parts and hardware.',
+  description: 'Made-to-measure window blinds, motorized systems and professional installation in Abuja, Lagos and Port Harcourt.',
   icons: {
     icon: [
       { url: '/veechelz-icon-v2.svg', type: 'image/svg+xml' },
@@ -39,7 +38,7 @@ export const metadata: Metadata = {
     shortcut: '/veechelz-icon-v2.ico',
     apple: '/veechelz-apple-v2.png',
   },
-  keywords: ['custom blinds', 'window blinds', 'roller blinds', 'venetian blinds', 'motorized blinds', 'blind parts', 'bottom plates', 'bead chains'],
+  keywords: ['custom blinds', 'window blinds', 'roller blinds', 'venetian blinds', 'motorized blinds'],
 }
 
 const jsonLd = {
@@ -72,7 +71,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <CartProvider>{children}</CartProvider>
+        {children}
         <HomeScrollReset />
         <Analytics />
       </body>

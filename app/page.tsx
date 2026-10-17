@@ -4,10 +4,8 @@ import { useState } from 'react'
 import Header from '@/components/Header'
 import Hero from '@/components/Hero'
 import Showroom from '@/components/Showroom'
-import PartsStore from '@/components/PartsStore'
 import Footer from '@/components/Footer'
 import ConsultationModal from '@/components/ConsultationModal'
-import QuoteDrawer from '@/components/QuoteDrawer'
 
 interface QuickFormValues {
   name: string
@@ -45,9 +43,6 @@ export default function HomePage() {
         <section id="solutions" className="scroll-mt-24">
           <Showroom onExploreCollection={handleExploreCollection} />
         </section>
-        <section id="projects">
-          <PartsStore />
-        </section>
         <ContactSection onOpenModal={openConsultationWithValues} />
       </main>
       <Footer onOpenConsultation={openConsultation} />
@@ -61,7 +56,6 @@ export default function HomePage() {
         initialNotes={selectedCategoryNotes}
         initialValues={prefill}
       />
-      <QuoteDrawer />
     </div>
   )
 }

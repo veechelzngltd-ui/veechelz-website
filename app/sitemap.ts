@@ -4,7 +4,6 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://veechelz-website.ve
 
 const routes = [
   '',
-  '/parts',
   '/projects',
   '/installation-services',
   '/technical-specifications',

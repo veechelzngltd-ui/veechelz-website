@@ -1,6 +1,6 @@
 # Veechelz Nigeria - Website
 
-Website for Veechelz Nigeria Limited: custom window blinds, installation and a trade parts store. Built with Next.js 14, React 18 and Tailwind CSS.
+Website for Veechelz Nigeria Limited: custom window blinds and installation. Built with Next.js 14, React 18 and Tailwind CSS.
 
 ## Run locally
 
@@ -16,7 +16,6 @@ Copy `.env.example` to `.env.local` and fill it in (never commit `.env.local`). 
 ## Where things live
 
 - `app/page.tsx` is the landing page. Do not put other pages in this file.
-- `app/parts/page.tsx` is the parts store.
 - `components/` holds shared sections (Header, Hero, Showroom, Footer, modals).
 - `public/brochure.pdf` is the file customers download from the brochure form.
 - `/promo` and `/flier` are internal marketing pages, hidden from search engines.

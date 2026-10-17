@@ -6,7 +6,6 @@ const footerLinks = {
   company: [
     { name: 'About Veechelz', href: '/about' },
     { name: 'Corporate Profile', href: '/about' },
-    { name: 'Parts Store', href: '/parts' },
     { name: 'Project Portfolio', href: '/projects' },
     { name: 'Careers', href: '/careers' },
     { name: 'Press & Media', href: '/press' },
